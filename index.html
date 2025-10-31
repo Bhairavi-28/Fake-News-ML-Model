@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fake News Detector</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>📰 Fake News Detector</h1>
+    <p class="subtitle">Enter a headline to check if it’s real or fake.</p>
+
+    <textarea id="headline" placeholder="Type a news headline..."></textarea>
+    <button onclick="checkNews()">Check</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <footer>
+    ⚠ <strong>Disclaimer:</strong> This model was trained on headlines only.  
+    It may be <strong>inaccurate</strong> — verify real news sources!
+  </footer>
+
+  <script>
+    async function checkNews() {
+      const headline = document.getElementById("headline").value.trim();
+      const resultDiv = document.getElementById("result");
+
+      if (!headline) {
+        resultDiv.innerHTML = "Please enter a headline.";
+        return;
+      }
+
+      resultDiv.innerHTML = "Analyzing...";
+
+      const response = await fetch("/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ headline }),
+      });
+
+      const data = await response.json();
+      resultDiv.innerHTML = data.result;
+
+      if (data.result.includes("Fake")) resultDiv.className = "result fake";
+      else if (data.result.includes("True")) resultDiv.className = "result true";
+    }
+  </script>
+</body>
+</html>
