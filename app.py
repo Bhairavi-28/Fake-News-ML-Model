@@ -3,27 +3,25 @@ import joblib
 
 app = Flask(__name__)
 
-# Load the trained model and vectorizer
 model = joblib.load('fake_news_model.pkl')
 vectorizer = joblib.load('tfidf_vectorizer.pkl')
 
-@app.route('/')
+@app.route("/")
 def home():
-    return render_template('index.html')
+    return render_template("index.html")
 
-@app.route('/predict', methods=['POST'])
+@app.route("/predict", methods=["POST"])
 def predict():
-    data = request.get_json(silent=True) or {}
-    headline = data.get("headline", "").strip()
+    data = request.get.json()
+    headline = data.get("headline", "")
 
-    if not headline:
-        return jsonify({"Result": "No headline provided. Please enter a valid headline."}), 400
-
-    headline_tfidf = vectorizer.transform([headline])
-    prediction = model.predict(headline_tfidf)[0]
+    if not headline.strip():
+        return jsonify({"Result": "No headline provided. Please enter a valid headline."})
+    headline_tfdif = vectorizer.transform([headline])
+    prediction = model.predict(headline_tfdif)[0]
     result = "Fake News" if prediction == 0 else "Real News"
 
-    return jsonify({"Result": result})
+    return jsonify({"result": result})
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)

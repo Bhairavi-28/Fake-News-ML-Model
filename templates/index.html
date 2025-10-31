@@ -4,11 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fake News Detector</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
-    <h1>📰 Fake News Detector</h1>
+    <h1>Fake News Detector</h1>
     <p class="subtitle">Enter a headline to check if it’s real or fake.</p>
 
     <textarea id="headline" placeholder="Type a news headline..."></textarea>
@@ -17,7 +17,7 @@
   </div>
 
   <footer>
-    ⚠ <strong>Disclaimer:</strong> This model was trained on headlines only.  
+    <strong>Disclaimer:</strong> This model was trained on headlines only.  
     It may be <strong>inaccurate</strong> — verify real news sources!
   </footer>
 
@@ -33,7 +33,7 @@
 
       resultDiv.innerHTML = "Analyzing...";
 
-      const response = await fetch("/predict", {
+      const response = await fetch("http://127.0.0.1:8080/predict", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ headline }),
